@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+selection="$(apt-cache search "$@" | fzf | sed 's/^\(.*\) - .*$/\1/')"
+
+apt-cache show "$selection"

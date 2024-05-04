@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+# Play some poopsound.
+
+len='7:00:00'
+
+if [ "$1" != '' ]; then
+	len=$1
+fi
+
+play -t sl - synth $len brownnoise band -n 800 200 tremolo 20 20 < /dev/zero

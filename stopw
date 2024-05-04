@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+# Count seconds, minutes, and hours; exit on 'q'.
+
+time,psec,pmin,hour = 0,0,0,0
+
+while true do
+  sleep(1)
+  time = time + 1
+  psec = time % 60
+  pmin = ((time - psec) / 60) % 60
+  phour = (((time - psec) / 60) - pmin) / 60
+  printf "\r%02d:%02d:%02d",phour,pmin,psec
+  system("stty raw -echo")
+  char = STDIN.read_nonblock(1) rescue nil
+  system("stty -raw echo")
+  exit if /q/i =~ char
+end

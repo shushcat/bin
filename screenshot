@@ -1,0 +1,11 @@
+#!/bin/sh -e
+
+# Take a screenshot with `grimshot`, which requires `grim` and `slurp`.
+
+mode="area"
+
+if [ "$1" = "s" ]; then
+	mode="screen"
+fi
+
+grimshot save ${mode} $HOME/Pictures/screenshot-$(date +"%Y-%m-%d-%Hh%M.jpg")

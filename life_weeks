@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+# Print an unsettling reminder.
+
+if ARGV.length != 3 then
+  puts "Enter your birthday: ./life_weeks YYYY MM DD"
+  exit
+end
+
+year = ARGV[0]
+month = ARGV[1]
+day = ARGV[2]
+
+gone="█"
+remain = "□"
+
+bday = Time.new(year, month, day)
+lived_weeks = (Time.now - bday) / (60*60*24*7)
+projected_years = 60
+projected_weeks = 52*(projected_years)
+
+life_weeks = []
+
+(1..projected_weeks).each do |week|
+  if week < lived_weeks then
+    life_weeks << gone
+  else
+    life_weeks << remain
+  end
+end
+
+(0...projected_years).each do |year|
+  week_block = life_weeks[(year*52)...(year*52)+52].join
+  printf "%02d. %s\n", year, week_block
+end
+
+puts "  ?"
