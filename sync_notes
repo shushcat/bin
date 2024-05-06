@@ -11,7 +11,7 @@ if [ -n "$CHANGED" ]; then
 	git pull --rebase origin main
 	git stash pop || true
 	git add .
-	git -c "user.name=JO Brickley" -c "user.email=me@jobrickley.com" commit -m "''$(date) autocommit"
+	git -c "user.name=JO Brickley" -c "user.email=me@jobrickley.com" commit -m "$(date) autocommit"
 	git push origin main
 else
 	git pull origin main
