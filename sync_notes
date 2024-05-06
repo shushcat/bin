@@ -2,12 +2,13 @@
 
 # Synchronize notes with a `git` repository.
 
+cd $HOME/Sync/notes
+
 CHANGED="$(git status --porcelain)"
 
-cd ~/Sync/notes
 if [ -n "$CHANGED" ]; then
 	git stash save
-	git pull --rebase
+	git pull --rebase origin main
 	git stash pop || true
 	git add .
 	git -c "user.name=JO Brickley" -c "user.email=me@jobrickley.com" commit -m "''$(date) autocommit"
