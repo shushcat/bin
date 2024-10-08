@@ -1,0 +1,30 @@
+#!/bin/sh -e
+# A nice little timer that pops up a notification if you're using Sway.
+
+print_help() {
+	echo "Usage: pom [seconds]"
+	echo "Counts down for 25 minutes if no arguments are passed."
+}
+
+if [ $# -gt 0 ]; then
+	if [ $1 -gt 0 ] 2> /dev/null; then
+		pomo=$1
+	else
+		print_help
+	fi
+else
+	pomo=$((60*25))
+fi
+
+time=0
+
+while [ $time -lt $pomo ]; do
+	sleep 1
+	time=$(($time + 1))
+	echo $(($pomo - $time))
+done
+
+# If Sway is running, make a banner.
+if [ $SWAYSOCK != "" ]; then
+	swaynag --type warning --message "Pom'd"
+fi
