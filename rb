@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env mruby
 
 def execute(_, code)
   puts _.instance_eval(&code)
