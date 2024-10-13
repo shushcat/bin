@@ -7,7 +7,7 @@ print_help() {
 }
 
 if [ $# -gt 0 ]; then
-	if [ $1 -gt 0 ] 2> /dev/null; then
+	if [ "$1" -gt 0 ] 2> /dev/null; then
 		pomo=$1
 	else
 		print_help
@@ -17,14 +17,17 @@ else
 fi
 
 time=0
+# Get the maximum length of the string displaying remaining seconds.
+pomo_len=$(printf "%s" "$pomo" | wc -c)
 
-while [ $time -lt $pomo ]; do
+while [ "$time" -lt "$pomo" ]; do
 	sleep 1
-	time=$(($time + 1))
-	echo "$(($pomo - $time))\r\c"
+	time=$((time + 1))
+	# Print remaining time as a string of length pomo_len.
+	printf "  %${pomo_len}d\r" "$((pomo - time))"
 done
 
 # If Sway is running, make a banner.
-if [ $SWAYSOCK != "" ]; then
+if [ "$SWAYSOCK" != "" ]; then
 	swaynag --type warning --message "Pom'd"
 fi
