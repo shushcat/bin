@@ -21,7 +21,7 @@ time=0
 while [ $time -lt $pomo ]; do
 	sleep 1
 	time=$(($time + 1))
-	echo $(($pomo - $time))
+	echo "$(($pomo - $time))\r\c"
 done
 
 # If Sway is running, make a banner.
