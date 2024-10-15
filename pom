@@ -24,7 +24,7 @@ while [ "$time" -lt "$pomo" ]; do
 	sleep 1
 	time=$((time + 1))
 	# Print remaining time as a string of length pomo_len.
-	printf "  %${pomo_len}d\r" "$((pomo - time))"
+	printf "  %0${pomo_len}.0f\r" "$((pomo - time))"
 done
 
 # If Sway is running, make a banner.
