@@ -1,0 +1,39 @@
+#!/bin/sh -e
+#
+# Report words changed over the past week in a Git repository.  This is useful
+# for tracking progress (or effort, in any case) on long writing projects.  The
+# original script is from
+# https://gist.github.com/MilesCranmer/5c7d86c8740219355d2dfdb184910711, and is
+# modified here to be portable and easier to call.  This script accepts one
+# argument, which, if passed, uses the `--since` flag to `git ref-log` to check
+# for changes in a given span.  If no argument is given, the span is the last
+# week.
+
+report() {
+	printf "added: %s\tdeleted: %s\tduplicated: %s\tchanged: %s\n" $1 $2 $3 $4
+}
+
+if [ "$1" = "" ]; then
+	span="1.week.ago"
+else
+	span="$1"
+fi
+
+total=0
+for sha in $(git rev-list --since=$span master | sed -e '$ d'); do
+	added=$(git diff --word-diff=porcelain $sha~1..$sha|grep -e"^+[^+]"|wc -w|xargs)
+	deleted=$(git diff --word-diff=porcelain $sha~1..$sha|grep -e"^-[^-]"|wc -w|xargs)
+	duplicated=$(git diff $sha~1..$sha|grep -e"^+[^+]" -e"^-[^-]"|sed -e's/.//'|sort|uniq -d|wc -w|xargs)
+	if [ "$added" -eq "0" ]; then
+		changed=$deleted
+		total=$((total+deleted))
+		report $added $deleted $duplicated $changed
+	elif [ $((duplicated/added * 100)) -gt 80 ]; then
+		report $added $deleted $duplicated 0
+	else
+		changed=$((added+deleted))
+		total=$((total+changed))
+		report $added $deleted $duplicated $changed
+	fi
+done
+printf "\t\t\t\t\t\t  %s: %s\n" "total" $total
