@@ -14,4 +14,5 @@ else
 	CMD="$(which open -a | tail -n 1)"	# MacOS
 fi
 
-$CMD "$@" &
+echo 
+$CMD "$@" 1>/dev/null &
