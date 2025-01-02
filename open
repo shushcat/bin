@@ -1,0 +1,18 @@
+#!/bin/sh -e
+
+# This tries to pick the right command for opening things, and puts the chosen
+# command in the background so the terminal isn't blocked.  The MacOS command
+# is picked by selecting the last command listed when running `which -a open`,
+# under the assumption the system's executable directory will have been the
+# first one added to `$PATH`.
+
+if [ $(which xdg-open) ]; then			# Linux
+	CMD="xdg-open"
+elif [ $(which cygstart) ]; then		# Windows
+	CMD="cygstart"
+else
+	CMD="$(which open -a | tail -n 1)"	# MacOS
+fi
+
+echo 
+$CMD "$@" 1>/dev/null &
