@@ -19,19 +19,18 @@ lived_weeks = (Time.now - bday) / (60*60*24*7)
 projected_years = 60
 projected_weeks = 52*(projected_years)
 
-life_weeks = []
+life_weeks = Array.new(projected_weeks)
 
 (1..projected_weeks).each do |week|
   if week < lived_weeks then
-    life_weeks << gone
+    life_weeks[week-1] = gone
   else
-    life_weeks << remain
+    life_weeks[week-1] = remain
   end
 end
 
-(0...projected_years).each do |year|
-  week_block = life_weeks[(year*52)...(year*52)+52].join
-  printf "%02d. %s\n", year, week_block
+(0...projected_years/2).each do |year|
+  week_block1 = life_weeks[(year*52)...(year*52)+52].join
+  week_block2 = life_weeks[(year*52+(30*52))...(year*52)+(31*52)].join
+  printf "%02d. %s\t%02d. %s\n", year, week_block1, year+30, week_block2
 end
-
-puts "  ?"
