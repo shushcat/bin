@@ -8,4 +8,4 @@ if [ "$1" = "s" ]; then
 	mode="screen"
 fi
 
-grimshot save ${mode} $HOME/Pictures/screenshot-$(date +"%Y-%m-%d-%Hh%M.png")
+grimshot save ${mode} $HOME/Pictures/screenshot-$(date +"%Y-%m-%d-%Hh%M%S.png")
