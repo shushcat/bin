@@ -10,7 +10,7 @@
 # week.
 
 report() {
-	printf "%s\tadded: %s\tdeleted: %s\tduplicated: %s\tchanged: %s\n" $1 $2 $3 $4 $5
+	printf "%s\t+%s\t-%s\t=%s\tΔ%s\n" $1 $2 $3 $4 $5
 }
 
 if [ "$1" = "" ]; then
@@ -32,4 +32,4 @@ for sha in $(git rev-list --since=$span master | sed -e '$ d'); do
 	total=$((total+changed))
 	report $weekday $added $deleted $duplicated $changed
 done
-printf "\t\t\t\t\t\t\t  %s: %s\n" "total" $total
+printf "   \t\t\t\tΣ%s\n" $total
