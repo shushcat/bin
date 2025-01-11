@@ -10,7 +10,7 @@
 # week.
 
 report() {
-	printf "added: %s\tdeleted: %s\tduplicated: %s\tchanged: %s\n" $1 $2 $3 $4
+	printf "%s\tadded: %s\tdeleted: %s\tduplicated: %s\tchanged: %s\n" $1 $2 $3 $4 $5
 }
 
 if [ "$1" = "" ]; then
@@ -21,19 +21,15 @@ fi
 
 total=0
 for sha in $(git rev-list --since=$span master | sed -e '$ d'); do
-	added=$(git diff --word-diff=porcelain $sha~1..$sha|grep -e"^+[^+]"|wc -w|xargs)
-	deleted=$(git diff --word-diff=porcelain $sha~1..$sha|grep -e"^-[^-]"|wc -w|xargs)
-	duplicated=$(git diff $sha~1..$sha|grep -e"^+[^+]" -e"^-[^-]"|sed -e's/.//'|sort|uniq -d|wc -w|xargs)
-	if [ "$added" -eq "0" ]; then
-		changed=$deleted
-		total=$((total+deleted))
-		report $added $deleted $duplicated $changed
-	elif [ $((duplicated/added * 100)) -gt 80 ]; then
-		report $added $deleted $duplicated 0
-	else
-		changed=$((added+deleted))
-		total=$((total+changed))
-		report $added $deleted $duplicated $changed
-	fi
+	weekday=$(git show --stat $sha | grep "^Date" |\
+		sed 's/Date:\s*\(.\{3\}\).*/\1/')
+	base=$(git diff --word-diff=porcelain $sha~1..$sha)
+	added=$(echo "$base" | grep -e"^+[^+]" | wc -w)
+	deleted=$(echo "$base" | grep -e"^-[^-]" | wc -w)
+	duplicated=$(echo "$base" | grep -e"^+[^+]" -e"^-[^-]" |\
+		sed -e's/.//' | sort | uniq -d | wc -w)
+	changed=$((added+deleted-duplicated))
+	total=$((total+changed))
+	report $weekday $added $deleted $duplicated $changed
 done
-printf "\t\t\t\t\t\t  %s: %s\n" "total" $total
+printf "\t\t\t\t\t\t\t  %s: %s\n" "total" $total
