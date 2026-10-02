@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+# xclip -selection clipboard -o
+
+wl-paste
