@@ -13,4 +13,3 @@ else
 		wl-find-cursor -s 67 -d 200 -c 0xaaff4040
 	done
 fi
-
